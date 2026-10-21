@@ -1,4 +1,5 @@
 const HASH_PREFIX = '#/';
+const COMMAND_PREFIX = '/';
 
 function safeDecode(text: string): string | null {
   try {
@@ -16,7 +17,7 @@ export function hashToInput(hash: string): string | null {
 
   const words = path.split('/').filter(Boolean);
 
-  return words.length > 0 ? words.join(' ') : null;
+  return words.length > 0 ? `${COMMAND_PREFIX}${words.join(' ')}` : null;
 }
 
 export function toHash(name: string, args: string[]): string {

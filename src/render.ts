@@ -80,7 +80,8 @@ function renderTable({ rows }: { rows: { key: string; value: string; url?: strin
 }
 
 function projectMeta(project: Project): HTMLElement {
-  const meta = el('span', 'dim', `${SEPARATOR}${project.lang}${SEPARATOR}${STAR}${project.stars}`);
+  const stars = project.stars > 0 ? `${SEPARATOR}${STAR}${project.stars}` : '';
+  const meta = el('span', 'dim', `${SEPARATOR}${project.lang}${stars}`);
   if (!project.demo) return meta;
 
   meta.append(SEPARATOR, link('demo', project.demo));
