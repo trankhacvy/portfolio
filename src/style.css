@@ -308,7 +308,7 @@ button:focus-visible {
 
 .chips button {
   min-height: 36px;
-  padding: 0.3em 1.2ch;
+  padding: 0.3em 1ch;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: transparent;
@@ -344,7 +344,7 @@ button:focus-visible {
   .chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6em;
+    gap: 0.4em;
     margin-top: var(--gap);
   }
 }
