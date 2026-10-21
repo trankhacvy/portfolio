@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { profile } from '../content/profile';
 import { loadPosts } from './content';
-import { COMMANDS, filterMenu, menuFor, moveIndex, resolve } from './commands';
+import { COMMANDS, execute, filterMenu, menuFor, moveIndex, resolve } from './commands';
 import { Theme, Tone, type Ctx, type MenuState } from './types';
 
 function nameOf(input: string): string {
@@ -190,5 +190,21 @@ describe('other commands', () => {
     const urls = table?.kind === 'table' ? table.rows.map((row) => row.url) : [];
 
     expect(urls).toContain('mailto:khacvy93@gmail.com');
+  });
+});
+
+describe('execute', () => {
+  it('returns an Error block naming the unknown input', () => {
+    const { blocks, hash } = execute('/nope', makeCtx());
+
+    expect(blocks).toEqual([{ kind: 'text', text: 'Unknown command: /nope. Try /help', tone: Tone.Error }]);
+    expect(hash).toBeNull();
+  });
+
+  it('gives routable commands a hash and others none', () => {
+    expect(execute('/blog hello-terminal', makeCtx()).hash).toBe('#/blog/hello-terminal');
+    expect(execute('work', makeCtx()).hash).toBe('#/work');
+    expect(execute('/help', makeCtx()).hash).toBeNull();
+    expect(execute('/clear', makeCtx()).hash).toBeNull();
   });
 });

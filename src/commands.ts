@@ -9,6 +9,7 @@ import {
   type Post,
   type Resolved,
 } from './types';
+import { toHash } from './route';
 
 const LEADING_SLASH = /^\//;
 const TOKEN_EDGE_PUNCT = /^[^\w?]+|[^\w?]+$/g;
@@ -245,4 +246,20 @@ export function moveIndex(state: MenuState, delta: number, count: number): MenuS
 
   const index = (state.index + delta + count) % count;
   return { ...state, index };
+}
+
+export type Execution = { blocks: Block[]; hash: string | null };
+
+export function execute(input: string, ctx: Ctx, registry: Command[] = COMMANDS): Execution {
+  const resolved = resolve(input, registry);
+
+  if ('unknown' in resolved) {
+    return { blocks: [text(`Unknown command: ${resolved.unknown}. Try /help`, Tone.Error)], hash: null };
+  }
+
+  const { command, args } = resolved;
+  const blocks = command.run(args, ctx);
+  const hash = command.routable ? toHash(command.name, args) : null;
+
+  return { blocks, hash };
 }
